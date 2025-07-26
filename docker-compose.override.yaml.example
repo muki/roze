@@ -1,0 +1,11 @@
+services:
+  django:
+    # environment:
+    #   - DJANGO_SETTINGS_MODULE=base.settings_dev
+    restart: no
+
+  huey:
+    restart: no
+
+  nginx:
+    restart: no

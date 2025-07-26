@@ -1,0 +1,61 @@
+{% extends 'base.html' %} {% block content %}
+  {% if messages %}
+    {% for message in messages %}
+      {% if 'success' in message.tags %}
+        <p class="p-2 mb-6 font-serif text-center text-gray-900 text-md bg-slate-200">{{ message }}</p>
+      {% else %}
+        {{ message }}
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+
+  <ul role="list" class="">
+    {% for flower_instance in flowers %}
+      <li class="flex overflow-hidden relative mt-2">
+      <!-- flower image -->
+        <a href="/roza/{{ flower_instance.id }}" class="flex-shrink-0 ml-2 w-28 h-28 bg-cover rounded-r-full" style="background-image: url('{{ flower_instance.representational_photo_thumbnail_url }}');"></a>
+      <!-- flower info -->
+        <a href="/roza/{{ flower_instance.id }}" class="flex flex-wrap content-between ml-2">
+          <div class="flex flex-wrap">
+            <h2 class="self-start w-full text-xl/5 min-w-11 h-max text-nowrap">{{ flower_instance.name }}</h2>
+            <p class="self-start w-full text-xs/4 min-w-11 h-max text-nowrap">{{ flower_instance.scientific_name }}</p>
+          </div>
+
+          <div class="w-full text-xs">
+            {% if flower_instance.location %}
+              <p class="text-nowrap">
+                📍: <span class="italic">{{ flower_instance.location }}</span>
+              </p>
+            {% endif %}
+            {% if flower_instance.watering_interval is not None %}
+              <p class="text-nowrap">
+                💧: <span>{{ flower_instance.midnights_to_next_watering_text }}</span>
+              </p>
+            {% endif %}
+            {% if flower_instance.fertilisation_interval is not None %}
+              <p class="mx-3">
+                💩: <span>{{ flower_instance.midnights_to_next_fertilisation_text }}</span>
+              </p>
+            {% endif %}
+          </div>
+        </a>
+      <!-- flower actions -->
+        <div class="flex flex-col flex-wrap justify-center ml-auto align-middle">
+          {% if flower_instance.needs_watering_today %}
+            <a class="block py-2 mx-2 mt-0 text-sm text-center rounded-t-full border border-gray-400 border-solid min-w-10" href="/roza/{{ flower_instance.id }}/water/">💧</a>
+            <a class="block py-2 mx-2 mt-0 text-sm text-center border border-t-0 border-b-0 border-solid min-w-10 border-l-gray-400 border-r-gray-400" href="/roza/{{ flower_instance.id }}/add_photo/">📷</a>
+            <a class="block py-2 mx-2 mt-0 text-sm text-center rounded-b-full border border-gray-400 border-solid min-w-10" href="/roza/{{ flower_instance.id }}/snooze_watering/2">⏰</a>
+          {% else %}
+            <a class="block py-2 mx-2 mt-0 text-sm text-center rounded-t-full border border-b-0 border-gray-400 border-solid opacity-50 pointer-events-none min-w-10 grayscale" disabled="true" aria-disabled="true" href="/roza/{{ flower_instance.id }}/water/">💧</a>
+            <a class="block py-2 mx-2 mt-0 text-sm text-center border border-gray-400 border-solid min-w-10 border-l-gray-400" href="/roza/{{ flower_instance.id }}/add_photo/">📷</a>
+            <a class="block py-2 mx-2 mt-0 text-sm text-center rounded-b-full border border-t-0 border-gray-400 border-solid opacity-50 pointer-events-none min-w-10 grayscale" disabled="true" aria-disabled="true" href="/roza/{{ flower_instance.id }}/snooze_watering/2">⏰</a>
+          {% endif %}
+        </div>
+      </li>
+      <hr class="mx-2 mt-2 border-gray-400" />
+    {% endfor %}
+  </ul>
+
+  <a href="/add_flower" class="block py-2 mx-2 mt-2 text-center rounded-full border border-gray-400 border-solid min-w-11">Dodaj rožo</a>
+  <a href="/rooms_and_locations" class="block py-2 mx-2 mt-3 mb-3 text-center rounded-full border border-gray-400 border-solid min-w-11">Uredi lokacije</a>
+{% endblock %}

@@ -1,0 +1,148 @@
+{% extends 'base.html' %} {% block content %}
+  <section class="block overflow-hidden relative">
+    <div
+      class="mr-2 w-full h-48 bg-center bg-cover"
+      style="background-image: url('{{ flower_instance.representational_photo_url }}');"></div>
+    <h1 class="mx-2 mt-3 text-5xl">{{ flower_instance.name }}</h1>
+    <h2 class="mx-2 mb-6 text-2xl">{{ flower_instance.scientific_name }}</h2>
+
+    {% if messages %} {% for message in messages %} {% if 'success' in message.tags %}
+      <p class="p-2 mb-6 font-serif text-center text-gray-900 text-md bg-slate-200">
+        {{ message }}
+      </p>
+    {% else %} {{ message }} {% endif %} {% endfor %} {% endif %}
+
+    <hr />
+    <p class="p-2 mb-6 font-serif text-center text-gray-900 text-md bg-slate-200">
+      🗓️ {{ flower_instance.midnights_to_next_watering_text }} 💧
+    </p>
+    <hr class="mb-6" />
+
+    {% if flower_instance.location is not None %}
+      <p class="mx-2 text-sm">
+        📍: <span class="italic">{{ flower_instance.location }}</span>
+      </p>
+      {% if flower_instance.location.light_in_lux is not None%}
+        <p class="mx-2 text-sm">
+          ☀️:
+          <span class="italic">{{ flower_instance.location.light_in_lux }} lx</span>
+        </p>
+      {% endif %} {% endif %} {% if flower_instance.watering_interval is None %}
+        <p class="mx-2 text-sm">
+          💧: <span class="italic"> This plant should not be watered. </span>
+        </p>
+      {% else %}
+        <p class="mx-2 text-sm">
+          💧:
+          <span class="italic">
+            This plant should be watered every {{ flower_instance.watering_interval }}
+            days.
+          </span>
+        </p>
+        <p class="mx-2 text-sm">
+          💧:
+          <span class="italic">
+            This plant was watered every {{ flower_instance.ninety_day_running_average_watering_interval }} days on
+            average.
+          </span>
+      {% endif %} {% if flower_instance.fertilisation_interval is None %}
+        </p>
+
+        <p class="mx-2 text-sm">
+          💩: <span class="italic"> This plant should not be fertilised. </span>
+        </p>
+      {% else %}
+        <p class="mx-2 text-sm">
+          💩:
+          <span class="italic">
+            This plant should be fertilised every {{ flower_instance.fertilisation_interval }} days.
+          </span>
+        </p>
+      {% endif %} {% if flower_instance.latest_repotting %}
+        <p class="mx-2 text-sm">
+          🪴:
+          <span class="italic">
+            This plant was last repotted {{ flower_instance.latest_repotting.timestamp|date:'F dS, Y' }}.
+          </span>
+        </p>
+      {% endif %} {% if flower_instance.needs_watering_today %}
+        <div class="flex w-full max-w-full">
+          <a
+            href="/roza/{{ flower_instance.id }}/water/"
+            class="block py-2 mx-2 mt-4 w-full font-sans text-center text-white bg-green-900 rounded-md border-2 border-green-900 border-solid hover:bg-green-900"
+          >💧 <br />
+            Water the plant.</a
+            >
+            <a
+              href="/roza/{{ flower_instance.id }}/snooze_watering/2"
+              class="block py-2 mx-2 mt-4 w-full font-sans text-center text-white bg-green-700 rounded-md border-2 border-green-900 border-solid hover:bg-green-900"
+            >⏰ <br />
+              Snooze watering.</a
+              >
+            </div>
+      {% else %}
+        <a
+          href="/roza/{{ flower_instance.id }}/water/"
+          class="block py-2 mx-2 mt-4 max-w-full font-sans text-center text-white bg-green-900 rounded-md border-2 border-green-900 border-solid hover:bg-green-900"
+        >💧 Water the plant. 💧</a
+          >
+      {% endif %} {% if flower_instance.needs_ferilisation_today %}
+        <div class="flex w-full max-w-full">
+          <a
+            href="/roza/{{ flower_instance.id }}/fertilise/"
+            class="block py-2 mx-2 mt-4 w-full font-sans text-center text-white bg-green-900 rounded-md border-2 border-green-900 border-solid hover:bg-green-900"
+          >💩 <br />
+            Fertilise the plant. 💩</a
+            >
+            <a
+              href="/roza/{{ flower_instance.id }}/snooze_fertilisation/2"
+              class="block py-2 mx-2 mt-4 w-full font-sans text-center text-white bg-green-700 rounded-md border-2 border-green-900 border-solid hover:bg-green-900"
+            >⏰ <br />
+              Snooze fertilisation.</a
+              >
+            </div>
+      {% else %}
+        <a
+          href="/roza/{{ flower_instance.id }}/fertilise/"
+          class="block py-2 mx-2 mt-4 max-w-full font-sans text-center text-white bg-green-900 rounded-md border-2 border-green-900 border-solid hover:bg-green-900"
+        >💩 Fertilise the plant. 💩</a
+          >
+      {% endif %}
+
+    <a
+      href="/roza/{{ flower_instance.id }}/repot/"
+      class="block py-2 mx-2 mt-4 max-w-full font-sans text-center text-white bg-green-900 rounded-md border-2 border-green-900 border-solid hover:bg-green-900"
+    >🪴 Repot the plant. 🪴</a
+      >
+
+      <a
+        href="/roza/{{ flower_instance.id }}/edit/"
+        class="block py-2 mx-2 mt-4 max-w-full font-sans text-center text-white bg-green-700 rounded-md border-2 border-green-900 border-solid hover:bg-green-900"
+      >Edit data</a
+        >
+        <a
+          href="/roza/{{ flower_instance.id }}/add_photo/"
+          class="block py-2 mx-2 mt-4 max-w-full font-sans text-center text-white bg-green-700 rounded-md border-2 border-green-900 border-solid hover:bg-green-900"
+        >Add photo</a
+          >
+          <a
+            href="/roza/{{ flower_instance.id }}/archive/"
+            class="block py-2 mx-2 mt-4 max-w-full font-sans text-center text-white bg-red-900 rounded-md border-2 border-green-900 border-solid hover:bg-green-900">
+            Archive flower
+          </a>
+
+          <hr />
+
+          <p class="mx-2 mt-6 text-2xl">Event log</p>
+          {% if not full_log %}
+            <p class="mx-2 mt-6 font-sans text-sm text-center">No events logged.</p>
+          {% else %} {% for thing in full_log %}
+            <hr />
+            <p class="mx-2 font-sans text-xl">
+              {{ thing.event_type }} {% if thing.timestamp %} {{ thing.timestamp|timesince }} {% else %} {{ thing.created_at|timesince }} {% endif %} ago
+            </p>
+            {% if thing.note %}
+              <p class="mx-2">{{ thing.note }}</p>
+            {% endif %} {% endfor %} {% endif %}
+        </section>
+{% endblock %}
