@@ -43,17 +43,16 @@ class FlowerForm(forms.ModelForm):
 
 
 class RepresentationalPhotoForm(forms.ModelForm):
-    # image = forms.ImageField()
-    # flower = forms.ModelChoiceField(
-    #     queryset=Flower.non_archived_flowers.all(), to_field_name="id", empty_label="Select flower"
-    # )
-
     class Meta:
         model = RepresentationalPhoto
         fields = (
             "image",
             "flower",
         )
+
+
+class ListingRepresentationalPhotoForm(RepresentationalPhotoForm):
+    template_name = "roze/listing_photo_form.html"
 
 
 class RoomForm(forms.ModelForm):

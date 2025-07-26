@@ -1,0 +1,7 @@
+.nojs {
+    display: block;
+}
+
+.somejs {
+    display: none;
+}

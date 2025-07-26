@@ -18,6 +18,12 @@
         font-style: normal;
       }
     </style>
+
+    <!-- progressive enhancement with JS -->
+    <link rel="stylesheet" href="{% static 'css/nojs.css' %}" />
+    <script type="text/javascript">
+        document.write('<link rel="stylesheet" href="{% static 'css/somejs.css' %}" />');
+    </script>
   </head>
 
   <body class="font-serif tracking-normal leading-normal bg-gray-50">

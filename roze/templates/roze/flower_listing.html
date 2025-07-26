@@ -43,11 +43,23 @@
         <div class="flex flex-col flex-wrap justify-center ml-auto align-middle">
           {% if flower_instance.needs_watering_today %}
             <a class="block py-2 mx-2 mt-0 text-sm text-center rounded-t-full border border-gray-400 border-solid min-w-10" href="/roza/{{ flower_instance.id }}/water/">💧</a>
-            <a class="block py-2 mx-2 mt-0 text-sm text-center border border-t-0 border-b-0 border-solid min-w-10 border-l-gray-400 border-r-gray-400" href="/roza/{{ flower_instance.id }}/add_photo/">📷</a>
+            <div class="somejs block py-2 mx-2 mt-0 text-sm text-center border border-t-0 border-b-0 border-solid min-w-10 border-l-gray-400 border-r-gray-400 cursor-pointer">
+              <form id="photo-form-{{ flower_instance.id }}" action="/roza/{{ flower_instance.id }}/add_photo/" method="post" enctype="multipart/form-data" class="overflow-hidden">
+                {% csrf_token %}
+                {{ flower_instance.form.render }}
+              </form>
+            </div>
+            <a class="nojs block py-2 mx-2 mt-0 text-sm text-center border border-t-0 border-b-0 border-solid min-w-10 border-l-gray-400 border-r-gray-400 cursor-pointer" href="/roza/{{ flower_instance.id }}/add_photo/">📷</a>
             <a class="block py-2 mx-2 mt-0 text-sm text-center rounded-b-full border border-gray-400 border-solid min-w-10" href="/roza/{{ flower_instance.id }}/snooze_watering/2">⏰</a>
           {% else %}
             <a class="block py-2 mx-2 mt-0 text-sm text-center rounded-t-full border border-b-0 border-gray-400 border-solid opacity-50 pointer-events-none min-w-10 grayscale" disabled="true" aria-disabled="true" href="/roza/{{ flower_instance.id }}/water/">💧</a>
-            <a class="block py-2 mx-2 mt-0 text-sm text-center border border-gray-400 border-solid min-w-10 border-l-gray-400" href="/roza/{{ flower_instance.id }}/add_photo/">📷</a>
+            <div class="somejs block py-2 mx-2 mt-0 text-sm text-center border border-gray-400 border-solid min-w-10 border-l-gray-400 cursor-pointer">
+              <form id="photo-form-{{ flower_instance.id }}" action="/roza/{{ flower_instance.id }}/add_photo/" method="post" enctype="multipart/form-data" class="overflow-hidden">
+                {% csrf_token %}
+                {{ flower_instance.form.render }}
+              </form>
+            </div>
+            <a class="nojs block py-2 mx-2 mt-0 text-sm text-center border border-gray-400 border-solid min-w-10 border-l-gray-400" href="/roza/{{ flower_instance.id }}/add_photo/">📷</a>
             <a class="block py-2 mx-2 mt-0 text-sm text-center rounded-b-full border border-t-0 border-gray-400 border-solid opacity-50 pointer-events-none min-w-10 grayscale" disabled="true" aria-disabled="true" href="/roza/{{ flower_instance.id }}/snooze_watering/2">⏰</a>
           {% endif %}
         </div>

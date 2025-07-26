@@ -14,6 +14,7 @@ from roze.models import Event, Flower, RepresentationalPhoto, Room, Location, Sn
 from roze.forms import (
     FlowerForm,
     RepresentationalPhotoForm,
+    ListingRepresentationalPhotoForm,
     RoomForm,
     LocationForm,
     EventForm,
@@ -39,6 +40,11 @@ def index(request):
             flower.fertilisation_urgency_sort_key,
         )
     )
+    for flower in flowers:
+        form_to_show = ListingRepresentationalPhotoForm(initial={"flower": flower.id})
+        form_to_show.flower_id = flower.id
+        flower.form = form_to_show
+
     context["flowers"] = flowers
 
     return render(request, "roze/flower_listing.html", context)
@@ -273,7 +279,11 @@ def add_representational_photo(request, flower_id):
             )
             representational_photo_instance.save()
 
-            return HttpResponseRedirect(f"/roza/{form.cleaned_data['flower']}")
+            referer = request.META.get("HTTP_REFERER", f"/roza/{flower_id}")
+            if "add_photo" in referer:
+                return HttpResponseRedirect(f"/roza/{flower_id}")
+            else:
+                return HttpResponseRedirect(referer)
 
         else:
             return HttpResponse(form.errors)  # TODO handle better

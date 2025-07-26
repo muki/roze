@@ -1,0 +1,33 @@
+<style>
+.wrapper-for-id_image input {
+  display: none;
+}
+.wrapper-for-id_image label {
+  cursor: pointer;
+}
+.wrapper-for-id_flower {
+  display: none;
+}
+</style>
+
+{% for field in form %}
+    <div class="wrapper-for-{{ field.id_for_label }}">
+        <label for="{{ field.id_for_label }}-{{ form.flower_id }}">
+            {% if field.id_for_label == "id_image" %}
+                <input
+                  type="file"
+                  name="image"
+                  accept="image/*"
+                  required=""
+                  id="{{ field.id_for_label }}-{{ form.flower_id }}"
+                  onchange="document.getElementById('photo-form-{{ form.flower_id }}').submit()"
+                >
+                📷
+            {% elif field.id_for_label == "id_flower" %}
+                <input type="number" value="{{ form.flower_id }}" id="{{ field.id_for_label }}-{{ form.flower_id }}" name="flower">
+            {% else %}
+                <h1>WARNING, SOMETHING IS WRONG WITH THIS FORM!</h1>
+            {% endif %}
+        </label>
+    </div>
+{% endfor %}
