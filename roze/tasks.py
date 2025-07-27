@@ -1,4 +1,6 @@
-from typing import List
+from typing import List, Tuple
+
+import json
 
 from huey import crontab
 from huey.contrib.djhuey import db_periodic_task
@@ -7,6 +9,9 @@ import requests
 
 from django.conf import settings
 from django.utils import timezone
+from django.contrib.auth.models import User  # TODO maybe inherit this in roze.models
+
+from push_notifications.models import WebPushDevice
 
 from roze.models import Flower
 
@@ -46,6 +51,19 @@ def send_signal_notification(
     )
 
     return f"Sent the following to {recipients}:\n\n{message}"
+
+
+def send_webpush_notification(
+    title: str,
+    message: str,
+    recipient: User,
+) -> str:
+    for device in recipient.webpushdevice_set.all():
+        data = json.dumps({"title": title, "message": message})
+
+        device.send_message(data)
+
+    return f"Sent the following to {recipient}:\n\n{title}\n{message}"
 
 
 # @db_periodic_task(settings.NOTIFICATION_INTERVAL)
@@ -119,6 +137,26 @@ def craft_signal_notification() -> str:
     return message
 
 
+def craft_webpush_notification() -> Tuple[str, str]:
+    # initiate message
+    message = ""
+
+    flowers_that_need_watering = [
+        flower
+        for flower in Flower.non_archived_flowers.all()
+        if flower.needs_watering(timezone.now())
+    ]
+
+    if len(flowers_that_need_watering) > 0:
+        title = "🪻 Your flowers need 💧"
+        message += f"Today is the day to water {len(flowers_that_need_watering)} of your plants."
+
+    return (
+        title,
+        message,
+    )
+
+
 @db_periodic_task(settings.NOTIFICATION_INTERVAL)
 def send_all_notifications() -> str:
     result_string = ""
@@ -134,5 +172,12 @@ def send_all_notifications() -> str:
     # send signal notification (currently only watering)
     if message := craft_signal_notification():
         send_signal_notification(message, settings.SIGNAL_RECIPIENTS)
+
+        # send webpush notification (currently only watering)
+        # currently also assumes single tennancy
+        # and piggybacks on signal notifications
+        title, message = craft_webpush_notification()
+        for user in User.objects.all():
+            send_webpush_notification(title, message, user)
 
     return result_string

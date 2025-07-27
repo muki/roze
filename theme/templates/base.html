@@ -24,6 +24,10 @@
     <script type="text/javascript">
         document.write('<link rel="stylesheet" href="{% static 'css/somejs.css' %}" />');
     </script>
+
+    <!-- WebPush things -->
+    <meta name="vapid-key" content="{{ WEB_PUSH_APPLICATION_SERVER_PUBLIC_KEY }}">
+    <script type="text/javascript" src="{% static 'js/webPush.js' %}"></script>
   </head>
 
   <body class="font-serif tracking-normal leading-normal bg-gray-50">

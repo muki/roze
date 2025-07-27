@@ -185,3 +185,10 @@ scratchpad/*
 # these two are here because the editor settings sometimes install things
 /package.json
 /yarn.lock 
+
+# WebPush VAPID keys
+private_key*.pem
+public_key*.pem
+
+# throwaway diff pathes
+*.patch

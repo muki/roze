@@ -5,12 +5,13 @@ from base.settings import *
 
 DEBUG = True
 
-# If you set DEBUG to False, you might need these two
+# If you set DEBUG to False, you might need these
+# DEBUG = False
 # STATIC_URL = "http://localhost:8001/static/"
 # MEDIA_URL = "http://localhost:8001/media/"
 
 # WARNING! Only for dev convenience
-ALLOWED_HOSTS = ["*"]
+# ALLOWED_HOSTS = ["*"]
 
 DATABASES["default"]["NAME"] = BASE_DIR / "dev.sqlite3"
 
@@ -32,3 +33,10 @@ SIGNAL_RECIPIENTS = [
 ]
 SIGNAL_NUMBER = "+987654321"
 SIGNAL_API_URL_BASE = "https://signal-cli-rest-api.someplace.online"
+
+# WebPush
+WEB_PUSH_APPLICATION_SERVER_PUBLIC_KEY = "TODO"
+PUSH_NOTIFICATIONS_SETTINGS = {
+    "WP_PRIVATE_KEY": BASE_DIR / "private_key.pem", # WARNING! Check the file path!
+    "WP_CLAIMS": {"sub": "mailto:TODO@TODO.com"}, # TODO
+}

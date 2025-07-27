@@ -1,4 +1,7 @@
 {% extends 'base.html' %} {% block content %}
+  {% if not webpush %}
+    <p class="p-2 mb-6 font-serif text-center text-gray-900 text-md bg-slate-200" onclick="registerSw()">You can enable WebPush notifications by tapping this banner.</p>
+  {% endif %}
   {% if messages %}
     {% for message in messages %}
       {% if 'success' in message.tags %}

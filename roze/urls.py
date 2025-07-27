@@ -14,6 +14,7 @@ Including another URLconf
 """
 
 from django.urls import path
+from django.views.generic import TemplateView
 
 from roze.views import (
     index,
@@ -32,6 +33,7 @@ from roze.views import (
     repot_flower,
     snooze_watering,
     archive_flower,
+    register_webpush_device,
 )
 
 urlpatterns = [
@@ -51,4 +53,12 @@ urlpatterns = [
     path("add_location/", add_location),
     path("location/<int:location_id>/edit/", edit_location),
     path("rooms_and_locations/", rooms_and_locations),
+    path("register_webpush_device/", register_webpush_device),
+    # WebPush service worker needs to be served from root to have full scope.
+    path(
+        "webPush.service.js",
+        TemplateView.as_view(
+            template_name="webPush.service.js", content_type="application/x-javascript"
+        ),
+    ),
 ]

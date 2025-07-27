@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "django_browser_reload",
     "huey.contrib.djhuey",
     "imagekit",
+    "push_notifications",
     "roze",
 ]
 
@@ -71,6 +72,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "roze.context_processors.webpush_application_server_public_key",
             ],
         },
     },
@@ -177,3 +179,10 @@ SIGNAL_RECIPIENTS = [
 ]
 SIGNAL_NUMBER = "TODO"
 SIGNAL_API_URL_BASE = "TODO"
+
+# WebPush
+WEB_PUSH_APPLICATION_SERVER_PUBLIC_KEY = "TODO"
+PUSH_NOTIFICATIONS_SETTINGS = {
+    "WP_PRIVATE_KEY": BASE_DIR / "private_key.pem",  # TODO
+    "WP_CLAIMS": {"sub": "mailto:TODO@TODO.com"},  # TODO
+}

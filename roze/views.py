@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+import json
 
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
@@ -6,6 +7,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.views.decorators.cache import never_cache
 from django.utils import timezone
+
+from push_notifications.models import WebPushDevice
 
 from roze.time_math import just_after_midnight
 
@@ -46,6 +49,11 @@ def index(request):
         flower.form = form_to_show
 
     context["flowers"] = flowers
+
+    if request.user.webpushdevice_set.all().count() > 0:
+        context["webpush"] = True
+    else:
+        context["webpush"] = False
 
     return render(request, "roze/flower_listing.html", context)
 
@@ -428,3 +436,12 @@ def log_event(request, flower_id):
     )
     context["form"] = form_to_show
     return render(request, "roze/generic_form.html", {"form": form_to_show})
+
+
+# WebPush
+# TODO Maybe flesh this out a bit instead of just returning text.
+def register_webpush_device(request):
+    data = json.loads(request.body)
+    WebPushDevice.objects.create(user=request.user, **data)
+
+    return HttpResponse("Your WebPush subscription was successful!")
