@@ -1,8 +1,13 @@
 // check if service workers are available ant start the process or complain
-const registerSw = async () => {
+async function registerSw(theP) {
     if ('serviceWorker' in navigator) {
+        // show a small loader webpush banner
+        console.log(theP);
+        theP.innerHTML = '<div class="webpush-loader"></div><p>WebPush notifications are being enabled, you should see an alert in less than a minute.</p><div class="webpush-loader"></div>';
+        // register the service worker
         const reg = await navigator.serviceWorker.register('webPush.service.js');
-        initialiseState(reg)
+        // do the checks and subscribe the user
+        initialiseState(reg);
     } else {
         alert("Your browser does not support the technology needed to make notifications work. :(")
     }
